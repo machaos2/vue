@@ -1,7 +1,7 @@
 <template>
   <div class="navbar-right">
     <div class="nav navbar-nav github-login">
-      <a href="#" class="btn btn-default login-btn">
+      <a href="/auth/login" class="btn btn-default login-btn">
         <i class="fa fa-user"></i> 登 录
       </a>
       <router-link to="/auth/register" class="btn btn-default login-btn">

@@ -5,9 +5,19 @@ Vue.use(Router)
 
 const routes = [
   {
+    path: '/',
+    name: 'Home',
+    component: () => import('@/views/tools/AssociationalWord')
+  },
+  {
     path: '/auth/register',
     name: 'Register',
     component: () => import('@/views/auth/Register')
+  },
+  {
+    path: '/auth/login',
+    name: 'Login',
+    component: () => import('@/views/auth/Login')
   }
 ]
 

@@ -38,7 +38,6 @@
                 default: true
             }
         },
-
         computed: {
             customOptions() {
                 let vm = this,
@@ -53,27 +52,23 @@
 
                 return this.allowEmpty ? [{id: null, label: ''}].concat(options) : options;
             },
-
             localValue() {
                 this.$nextTick(function() {
                     $(this.$el).val(this.value).trigger("chosen:updated");
                 });
 
                 return this.value;
-            }
+            },
         },
-
         watch: {
             localValue() {
             },
-
             customOptions() {
                 this.$nextTick(function() {
                     $(this.$el).val(this.value).trigger("chosen:updated");
                 });
             }
         },
-
         mounted() {
             let component = this;
 

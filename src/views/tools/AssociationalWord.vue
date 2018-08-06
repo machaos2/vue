@@ -39,94 +39,98 @@
 </template>
 
 <script>
-import createCaptcha from '@/utils/createCaptcha'
-import ls from '@/utils/localStorage'
-import 'chosen-js'
+  import ls from '@/utils/localStorage'
 
-export default {
-  name: 'AssociationalWord',
-  data() {
-    return {
-      words: '',
-      append: '',
-      search: '壹加壹',
-      engine_selected: ['baidu-wap'],
-      engines: [
-        {
-          title: "百度",
-          slug: "baidu-web",
-          url: "https://www.baidu.com/",
-          search: "",
+  export default {
+    name: 'AssociationalWord',
+    data() {
+      return {
+        words: '',
+        append: '',
+        search: '壹加壹',
+        engine_selected: ['baidu-wap'],
+        engines: [
+          {
+            title: "百度",
+            slug: "baidu-web",
+            url: "https://www.baidu.com/",
+            search: "",
 
-        },
-        {
-          title: "百度移动",
-          slug: "baidu-wap",
-          url: "https://www.baidu.com/",
-        },
-        {
-          title: "搜狗",
-          slug: "sogou-web",
-          url: "https://www.baidu.com/",
-        },
-        {
-          title: "搜狗移动",
-          slug: "sogou-wap",
-          url: "https://www.baidu.com/",
-        },
-        {
-          title: "神马",
-          slug: "shenma",
-          url: "https://www.baidu.com/",
-        }/*,
-        {
-          title: "360",
-          slug: "360-web",
-          url: "https://www.baidu.com/",
-        },
-        {
-          title: "360移动",
-          slug: "360-wap",
-          url: "https://www.baidu.com/",
-        }*/
-      ],
-      msg: '', // 消息
-      msgType: '', // 消息类型
-      msgShow: false // 是否显示消息，默认不显示
-    }
-  },
-  created() {
-    $('.chosen').chosen();
-  },
-  methods: {
-    register(e) {
-      this.$nextTick(() => {
-        const target = e.target.type === 'submit' ? e.target : e.target.parentElement
-
-        if (target.canSubmit) {
-          this.submit()
-        }
-      })
+          },
+          {
+            title: "百度移动",
+            slug: "baidu-wap",
+            url: "https://www.baidu.com/",
+          },
+          {
+            title: "搜狗",
+            slug: "sogou-web",
+            url: "https://www.baidu.com/",
+          },
+          {
+            title: "搜狗移动",
+            slug: "sogou-wap",
+            url: "https://www.baidu.com/",
+          },
+          {
+            title: "神马",
+            slug: "shenma",
+            url: "https://www.baidu.com/",
+          }/*,
+          {
+            title: "360",
+            slug: "360-web",
+            url: "https://www.baidu.com/",
+          },
+          {
+            title: "360移动",
+            slug: "360-wap",
+            url: "https://www.baidu.com/",
+          }*/
+        ],
+        msg: '', // 消息
+        msgType: '', // 消息类型
+        msgShow: false // 是否显示消息，默认不显示
+      }
     },
-    submit() {
+    created() {
     },
-    showMsg(msg, type = 'warning') {
-      this.msg = msg
-      this.msgType = type
-      this.msgShow = false
+    mounted() {
+      let component = this;
 
-      this.$nextTick(() => {
-        this.msgShow = true
-      })
+      $(".chosen").chosen({
+        width: "100%",
+      }).change(function($event) {
+          component.$emit('input', $($event.target).val());
+      }); // chosen
+    },
+    methods: {
+      register(e) {
+        console.log(this.words);
+        console.log(this.engine_selected);
+        // this.$nextTick(() => {
+        //   const target = e.target.type === 'submit' ? e.target : e.target.parentElement;
+
+        //   if (target.canSubmit) this.submit();
+        // })
+      },
+      submit() {
+      },
+      showMsg(msg, type = 'warning') { // 提示信息
+        this.msg = msg;
+        this.msgType = type;
+        this.msgShow = false;
+
+        this.$nextTick(() => {
+          this.msgShow = true;
+        })
+      }
     }
   }
-}
 </script>
 
 <style scoped>
   textarea {
     height: 400px;
   }
-
-@import "~chosen-js/chosen.css";
 </style>

@@ -4,6 +4,8 @@ import router from './router'
 import './directives'
 import './components'
 import $ from 'jquery'
+import 'chosen-js/chosen.css'
+import 'chosen-js'
 
 Vue.config.productionTip = false
 

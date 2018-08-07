@@ -1,5 +1,5 @@
 <template>
-    <select :data-placeholder="placeholder" :multiple="multiple">
+    <select :data-placeholder="placeholder" :multiple="multiple" :value="value">
         <option v-for="option in customOptions" v-bind:value="option.id">
             {{ option.label }}
         </option>
@@ -45,8 +45,8 @@
 
                 Object.keys(this.options).forEach(function(key) {
                     options.push({
-                        'id': key,
-                        'label': vm.options[key]
+                        'id': vm.options[key].slug,
+                        'label': vm.options[key].title
                     });
                 });
 

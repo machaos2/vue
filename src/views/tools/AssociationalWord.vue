@@ -30,9 +30,17 @@
         </div>
       </div>
     </div>
-    <div class="col-md-8">
+    <!-- <div class="col-md-8">
+      <el-tabs v-model="activeName" @tab-click="handleClick" v-if="results">
+        <el-tab-pane :label="result.title" :name="result.slug" v-for="result in results" :key="result.slug">
+          <el-table :data="result.data" height="750" border style="width: 100%;" :span-method="objectSpanMethod">
+            <el-table-column prop="title" label="关键词" width="180" rowspan="associated.length"></el-table-column>
+            <el-table-column prop="item" label="联想词" width="180" v-for="item in associated"></el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+    </div> -->
 
-    </div>
   </div>
 </template>
 
@@ -108,6 +116,63 @@
             slug: "360_wap",
             url: "https://www.baidu.com/",
           }
+        ],
+        activeName: null,
+        results: [
+          {
+            title: "搜狗移动",
+            slug: "sogou_wap",
+            data: [
+              {
+                title: '合肥',
+                associated : [
+                  '合肥壹加壹',
+                  '合肥整形',
+                  '合肥华美',
+                ],
+              },
+              {
+                title: '合肥',
+                associated : [
+                  '合肥壹加壹',
+                  '合肥整形',
+                  '合肥华美',
+                ],
+              },
+              {
+                title: '合肥',
+                associated : [
+                  '合肥壹加壹',
+                  '合肥整形',
+                  '合肥华美',
+                ],
+              },
+              {
+                title: '合肥',
+                associated : [
+                  '合肥壹加壹',
+                  '合肥整形',
+                  '合肥华美',
+                ],
+              },
+              {
+                title: '合肥',
+                associated : [
+                  '合肥壹加壹',
+                  '合肥整形',
+                  '合肥华美',
+                ],
+              },
+              {
+                title: '合肥',
+                associated : [
+                  '合肥壹加壹',
+                  '合肥整形',
+                  '合肥华美',
+                ],
+              },
+            ],
+          },
         ],
         msg: '', // 消息
         msgType: '', // 消息类型
@@ -333,6 +398,28 @@
 
           // if (target.canSubmit) this.submit();
         });
+      },
+      objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+        console.log(row);
+        console.log(column);
+        console.log(rowIndex);
+        console.log(columnIndex);
+        if (columnIndex === 0) {
+          if (rowIndex % 2 === 0) {
+            return {
+              rowspan: 2,
+              colspan: 1
+            };
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
+            };
+          }
+        }
+      },
+      handleClick(tab, event) {
+        console.log(tab, event);
       },
       setSelectedEngines(selected) {
         this.engine_selected = selected;

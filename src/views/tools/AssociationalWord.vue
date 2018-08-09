@@ -33,10 +33,18 @@
     <div class="col-md-8">
       <el-tabs v-model="activeName" v-if="results">
         <el-tab-pane :label="result.title" :name="result.slug" v-for="result in results" :key="result.slug">
-          <!-- <el-table :data="result.data" height="750" border style="width: 100%;" :span-method="objectSpanMethod">
-            <el-table-column prop="title" label="关键词" width="180" rowspan="associated.length"></el-table-column>
-            <el-table-column prop="item" label="联想词" width="180" v-for="item in associated"></el-table-column>
-          </el-table> -->
+          <table class="result">
+            <tr>
+              <th style="min-width: 150px;">关键词</th>
+              <th style="min-width: 300px;">联想词</th>
+            </tr>
+            <tbody v-for="data in result.data">
+              <tr v-for="(item, index) in data.associated">
+                <td v-text="data.title"  v-if="index==0" :rowspan="data.associated.length"></td>
+                <td v-text="item"></td>
+              </tr>
+            </tbody>
+          </table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -64,26 +72,25 @@
     },
     data() {
       return {
-        words: `合肥
-顺德
-东莞
-武汉
-北京
-芜湖
-宁波
-丽人
-壹美尚
-阜阳`,
-        append: '整形',
-        search: '壹加壹',
-        engine_selected: ['baidu_web'],
+        words: '',
+        append: '',
+        search: '',
+        engine_selected: ['baidu_wap', 'sogou_wap', 'shenma'],
         placeholder: "请选择",
+        engine_map: {
+          baidu_web: '百度',
+          baidu_wap: '百度移动',
+          sogou_web: '搜狗',
+          sogou_wap: '搜狗移动',
+          shenma: '神马',
+          sll_web: '360',
+          sll_wap: '360移动',
+        },
         engines: [
           {
             title: "百度",
             slug: "baidu_web",
             url: "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su",
-            search: "",
           },
           {
             title: "百度移动",
@@ -107,98 +114,74 @@
           },
           {
             title: "360",
-            slug: "360_web",
+            slug: "sll_web",
             url: "https://sug.so.360.cn/suggest",
           },
           {
             title: "360移动",
-            slug: "360_wap",
+            slug: "sll_wap",
             url: "https://www.baidu.com/",
           }
         ],
-        activeName: null,
-        results: [
-          {
-            title: "搜狗移动",
-            slug: "sogou_wap",
-            data: [
-              {
-                title: '合肥',
-                associated : [
-                  '合肥壹加壹',
-                  '合肥整形',
-                  '合肥华美',
-                ],
-              },
-              {
-                title: '合肥',
-                associated : [
-                  '合肥壹加壹',
-                  '合肥整形',
-                  '合肥华美',
-                ],
-              },
-              {
-                title: '合肥',
-                associated : [
-                  '合肥壹加壹',
-                  '合肥整形',
-                  '合肥华美',
-                ],
-              },
-              {
-                title: '合肥',
-                associated : [
-                  '合肥壹加壹',
-                  '合肥整形',
-                  '合肥华美',
-                ],
-              },
-              {
-                title: '合肥',
-                associated : [
-                  '合肥壹加壹',
-                  '合肥整形',
-                  '合肥华美',
-                ],
-              },
-              {
-                title: '合肥',
-                associated : [
-                  '合肥壹加壹',
-                  '合肥整形',
-                  '合肥华美',
-                ],
-              },
-            ],
-          },
-        ],
+        results: [],
         msg: '', // 消息
         msgType: '', // 消息类型
         msgShow: false // 是否显示消息，默认不显示
       }
     },
-    created() {
-    },
-    mounted() {
+    computed: {
+      activeName: {
+        get() {
+          return this.engine_selected[0];
+        },
+        set() {
+
+        }
+      }
     },
     methods: {
       register(e) {
+        let that = this;
+
         this.$nextTick(() => {
+          this.results = [];
+
           this.engine_selected.forEach(engine => {
+            let temp = [];
             let items = this.words.split('\n');
 
             items.forEach(item => {
-              let result = associated(engine, item+this.append);
-              // console.log(result);
+              let word = item+this.append;
+              let promise = associated(engine, word);
+
+              promise.then(data => {
+                data = data.filter(i => i.indexOf(this.search)!=-1);
+                temp.push({
+                  title: word,
+                  associated: data,
+                });
+              }, error => {
+                console.log(error);
+
+                temp.push({
+                  title: word,
+                  associated: [],
+                });
+              });
+            });
+
+            this.results.push({
+              title: this.engine_map[engine],
+              slug: engine,
+              data: temp,
             });
           })
         });
+
+        console.log(this.results);
       },
       setSelectedEngines(selected) {
         this.engine_selected = selected;
-      },
-      submit() {
       },
       showMsg(msg, type = 'warning') { // 提示信息
         this.msg = msg;
@@ -216,5 +199,9 @@
 <style scoped>
   textarea {
     height: 400px;
+  }
+  table.result td, table.result th {
+    border: 1px solid #bbb;
+    padding: 2px 5px;
   }
 </style>

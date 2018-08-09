@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import './directives'
-import './components'
+import './directives';
+import './components';
 
 import $ from 'jquery';
 import 'chosen-js/chosen.css';

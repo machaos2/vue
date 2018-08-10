@@ -41,7 +41,7 @@
             <tbody v-for="data in result.data">
               <tr v-for="(item, index) in data.associated">
                 <td v-text="data.title"  v-if="index==0" :rowspan="data.associated.length"></td>
-                <td v-text="item"></td>
+                <td v-html="'<i>' + (item.index+1) + '</i> ' + item.word"></td>
               </tr>
             </tbody>
           </table>
@@ -134,9 +134,7 @@
         get() {
           return this.engine_selected[0];
         },
-        set() {
-
-        }
+        set() {}
       }
     },
     methods: {
@@ -155,7 +153,13 @@
               let promise = associated(engine, word);
 
               promise.then(data => {
-                data = data.filter(i => i.indexOf(this.search)!=-1);
+                data = data.map((item, index) => {
+                  return {
+                    index: index,
+                    word: item
+                  }
+                });
+                data = data.filter(i => i.word.indexOf(this.search)!=-1);
                 temp.push({
                   title: word,
                   associated: data,
@@ -175,10 +179,8 @@
               slug: engine,
               data: temp,
             });
-          })
+          });
         });
-
-        console.log(this.results);
       },
       setSelectedEngines(selected) {
         this.engine_selected = selected;
